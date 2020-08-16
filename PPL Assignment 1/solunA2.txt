@@ -1,0 +1,145 @@
+#Assignment 1
+SOLUTION TO PROBLEM A2.c
+
+Gimple
+------
+
+f ()
+{
+  int D.1715;
+  int Z.0;
+  int a;
+  int b;
+  int c;
+
+  a = Z;
+  if (a <= 9) goto <D.1710>; else goto <D.1711>;
+  <D.1710>:
+  b = 5;
+  c = 17;
+  goto <D.1712>;
+  <D.1711>:
+  b = 6;
+  c = 20;
+  if (a == 0) goto <D.1713>; else goto <D.1714>;
+  <D.1713>:
+  c = 0;
+  <D.1714>:
+  <D.1712>:
+  D.1715 = b * 10;
+  Z.0 = D.1715 + c;
+  Z = Z.0;
+}
+
+
+CFG
+---
+
+
+;; Function f (f, funcdef_no=0, decl_uid=1704, cgraph_uid=0)
+
+f ()
+{
+  int c;
+  int b;
+  int a;
+  int Z.0;
+  int D.1715;
+
+<bb 2>:
+  a = Z;
+  if (a <= 9)
+    goto <bb 3>;
+  else
+    goto <bb 4>;
+
+<bb 3>:
+  b = 5;
+  c = 17;
+  goto <bb 6>;
+
+<bb 4>:
+  b = 6;
+  c = 20;
+  if (a == 0)
+    goto <bb 5>;
+  else
+    goto <bb 6>;
+
+<bb 5>:
+  c = 0;
+
+<bb 6>:
+  D.1715 = b * 10;
+  Z.0 = D.1715 + c;
+  Z = Z.0;
+  return;
+
+}
+
+ANSWER=
+
+1. How have if-blocks  been translated into GIMPLE  statements? Can you
+ differentiate between conditional and unconditional gotos?
+
+ 
+       
+
+
+ANS==(i)If-blocks are translated into GIMPLE by turning them into labels from conditional gotos.
+(ii)differnce between conditional and non conditional gotos=
+ Unconditional gotos are of a single line whereas Conditional gotos always have more than two lines of labels for the taken and not-taken branches.
+
+2. Repeat  the  above compilation,  but  now  asking for  another  dump
+ that  of  the pass  "cfg".  View  this  pass  and say  whether  this
+ representation makes it easier to  read and understand GIMPLEs. Draw
+ the control-flow graph  of the program A-2.c on a  piece of paper by
+ looking at the CFG dump.
+
+ANS==The representation makes it easier to understand the control flow.but the idea given by this is very short in terms of lines.
+
+ADDITIONAL PROBLEM  ANSWER=
+
+Code:
+
+void f() {
+  int a = 1, b = 2, c = 3, x;
+  x = a ? b : c;
+}
+
+CFG:
+
+;; Function f (f, funcdef_no=0, decl_uid=1703, cgraph_uid=0)
+
+f ()
+{
+  int x;
+  int c;
+  int b;
+  int a;
+  int iftmp.0;
+
+<bb 2>:
+  a = 1;
+  b = 2;
+  c = 3;
+  if (a != 0)
+    goto <bb 3>;
+  else
+    goto <bb 4>;
+
+<bb 3>:
+  iftmp.0 = b;
+  goto <bb 5>;
+
+<bb 4>:
+  iftmp.0 = c;
+
+<bb 5>:
+  x = iftmp.0;
+  return;
+
+}
+
+Answer:
+in the above case GCC handles ternary operator[a?b :c] as a different conditional gotos of various lines. 
